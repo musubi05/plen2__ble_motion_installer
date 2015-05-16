@@ -1,8 +1,0 @@
-C:\Git\BLEMotionInstaller\bin\Debug\BLEMotionInstaller.exe
-C:\Git\BLEMotionInstaller\bin\Debug\BLEMotionInstaller.pdb
-C:\Git\BLEMotionInstaller\obj\x86\Debug\BLEMotionInstaller.Form1.resources
-C:\Git\BLEMotionInstaller\obj\x86\Debug\BLEMotionInstaller.Properties.Resources.resources
-C:\Git\BLEMotionInstaller\obj\x86\Debug\BLEMotionInstaller.csproj.GenerateResource.Cache
-C:\Git\BLEMotionInstaller\obj\x86\Debug\BLEMotionInstaller.exe
-C:\Git\BLEMotionInstaller\obj\x86\Debug\BLEMotionInstaller.pdb
-C:\Git\BLEMotionInstaller\obj\x86\Debug\BLEMotionInstaller.csprojResolveAssemblyReference.cache
