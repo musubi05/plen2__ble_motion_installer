@@ -33,6 +33,7 @@ namespace BLEMotionInstaller
         NotConnected,
         Connecting,
         Connected,
+        SendCompleted,
         NotPLEN2
     }
 
@@ -64,21 +65,34 @@ namespace BLEMotionInstaller
         {
             get { return serialPort.PortName; }
         }
+        /// <summary>
+        /// 本インスタンスのBLEコネクション状態
+        /// </summary>
+        public BLEState BLEConnectState
+        {
+            get { return bleConnectState; }
+        }
+        /// <summary>
+        /// 接続・通信完了通信相手リスト（PLEN問わず）
+        /// </summary>
+        static public Dictionary<Int64, BLEState> connectedDict = new Dictionary<Int64, BLEState>();
+        /// <summary>
+        /// 送信完了モーションファイル数
+        /// </summary>
         public int sendedMfxCommandCnt;
+
         private readonly int DELAY_INTERVAL = 50;
         private readonly byte[] PLEN2_TX_CHARACTERISTIC_UUID =
 	        {
 		        0xF9, 0x0E, 0x9C, 0xFE, 0x7E, 0x05, 0x44, 0xA5, 0x9D, 0x75, 0xF1, 0x36, 0x44, 0xD6, 0xF6, 0x45
 	        };
         private SerialPort serialPort;
-        private bool isSerialReceived;
         private BLEState bleConnectState;
-        private byte[] receiveRawData;
-        private Bluegiga.BGLib bgLib;
         private Int64 connectedBLEKey;
         private List<PLEN.MFX.BLEMfxCommand> sendMfxCommandList;
-        static private Dictionary<Int64, BLEState> connectedDict = new Dictionary<Int64, BLEState>();
-
+        private Bluegiga.BGLib bgLib;
+        private byte[] receiveRawData;
+        private bool isSerialReceived;
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -112,8 +126,12 @@ namespace BLEMotionInstaller
             {
                 serialPort.Open();
                 serialCommProcessMessage(this, "Opened");
-                sendedMfxCommandCnt = 0;
-                halfDuplexComm();
+
+                while (true)
+                {
+                    halfDuplexComm();
+                    Thread.Sleep(500);
+                }
             }
             catch (Exception) { throw; }
             finally
@@ -175,13 +193,19 @@ namespace BLEMotionInstaller
                 // ※connectedDictは他スレッドからの参照もありうるので排他制御
                 if (bleConnectState == BLEState.NotConnected)
                 {
+                    lock(connectedDict)
                     {
-                        if (connectedDict.ContainsKey(key) == false || connectedDict[key] == BLEState.NotConnected)
+                        if (connectedDict.ContainsKey(key) == true && connectedDict[key] != BLEState.NotConnected)
                         {
-                            bleConnectState = BLEState.Connecting;
-                            connectedDict.Add(key, BLEState.Connecting);
-                            bgLib.SendCommand(serialPort, bgLib.BLECommandGAPConnectDirect(e.sender, 0, 60, 76, 100, 0));
+                            return;
                         }
+                        if (connectedDict.ContainsKey(key) == true)
+                            connectedDict.Add(key, BLEState.Connecting);
+                        else
+                            connectedDict[key] = BLEState.Connecting;
+                        bleConnectState = BLEState.Connecting;
+                        bgLib.SendCommand(serialPort, bgLib.BLECommandGAPConnectDirect(e.sender, 0, 60, 76, 100, 0));
+                        
                     }
                 }
                 
@@ -222,11 +246,10 @@ namespace BLEMotionInstaller
         {
 
             serialCommProcessMessage(this, "HalfDuplexCommunication Started");
-
+            sendedMfxCommandCnt = 0;
             try
             {
                 /*----- 半二重通信ここから -----*/
-
                 isSerialReceived = false;
                 bgLib.SendCommand(serialPort, bgLib.BLECommandGAPEndProcedure());
                 while (bgLib.IsBusy() == true)
@@ -239,11 +262,14 @@ namespace BLEMotionInstaller
 
                 // PLEN2との接続を試みる
                 Thread.Sleep(10);
+                serialCommProcessMessage(this, "PLEN2 searching...");
                 bleConnectState = BLEState.NotConnected;
                 bgLib.SendCommand(serialPort, bgLib.BLECommandGAPDiscover(1));
                 while (bleConnectState != BLEState.Connected)
                     Thread.Sleep(1);
+                
                 /*-- ここからPLEN2と接続中 --*/
+                serialCommProcessMessage(this, "PLEN2 Connected");
                 serialCommProcessBLEConncted(this);
                 foreach (PLEN.MFX.BLEMfxCommand sendMfxCommand in sendMfxCommandList)
                 {
@@ -300,14 +326,10 @@ namespace BLEMotionInstaller
                     serialCommProcessMfxCommandSended(this);
                     Thread.Sleep(500);
                 }
-                /*----- 半二重通信ここまで -----*/
-                bgLib.SendCommand(serialPort, bgLib.BLECommandConnectionDisconnect(0));
-                while (bgLib.IsBusy() == true)
-                    Thread.Sleep(1);
                 // 終了イベントを発生
-                serialCommProcessMessage(this, "Communication All Finished");
+                serialCommProcessMessage(this, "Communication Finished");
                 serialCommProcessFinished(this, new SerialCommProcessFinishedEventArgs(serialPort.PortName, sendMfxCommandList));
-
+                connectedDict[connectedBLEKey] = BLEState.SendCompleted;
             }
             catch (Exception e)
             {

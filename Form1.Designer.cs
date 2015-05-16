@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelPadding = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelSendMfxCnt = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
@@ -43,27 +44,34 @@
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Enabled = false;
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(150, 16);
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar1,
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 370);
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabelPadding,
+            this.toolStripStatusLabel2});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 369);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(634, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(634, 23);
             this.statusStrip1.TabIndex = 19;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 18);
+            // 
+            // toolStripStatusLabelPadding
+            // 
+            this.toolStripStatusLabelPadding.Name = "toolStripStatusLabelPadding";
+            this.toolStripStatusLabelPadding.Size = new System.Drawing.Size(302, 18);
+            this.toolStripStatusLabelPadding.Spring = true;
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(165, 18);
+            this.toolStripStatusLabel2.Text = "コマンド送信完了PLEN数：0";
             // 
             // labelSendMfxCnt
             // 
@@ -119,7 +127,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(104, 26);
             this.button2.TabIndex = 13;
-            this.button2.Text = "通信強制終了";
+            this.button2.Text = "全通信終了";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -175,6 +183,7 @@
             this.Controls.Add(this.listBox1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -185,7 +194,6 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label labelSendMfxCnt;
@@ -197,6 +205,8 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelPadding;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
 
     }
 }

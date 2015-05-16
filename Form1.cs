@@ -33,8 +33,7 @@ namespace BLEMotionInstaller
         /// </summary>
         private List<PLEN.MFX.BLEMfxCommand> sendMfxCommandList = new List<PLEN.MFX.BLEMfxCommand>();
 
-        private int bleConnectedCnt;
-
+        private int commandSendedPLENCnt;
 
         public Form1()
         {
@@ -169,7 +168,7 @@ namespace BLEMotionInstaller
                     }
                 }
                 threadDict.Clear();
-
+                SerialCommProcess.connectedDict.Clear();
                 // 選択されているポート名を用いてシリアル通信スレッドを作成．実行．
                 foreach (string portDictKey in listBox1.SelectedItems)
                 {
@@ -186,8 +185,8 @@ namespace BLEMotionInstaller
                     threadDict[portName].Name = "SerialCommThread_" + portName;
                     threadDict[portName].Start();
                 }
-                bleConnectedCnt = 0;
-                toolStripProgressBar1.Enabled = false;
+                toolStripStatusLabel2.Text = "コマンド送信完了PLEN数：0";
+                commandSendedPLENCnt = 0;
                 button1.Enabled = false;
                 button2.Enabled = true;
             }
@@ -195,65 +194,40 @@ namespace BLEMotionInstaller
         /***** モーションデータ送信完了メソッド（イベント呼び出し） *****/
         void serialCommProcessEventMfxCommandSended(SerialCommProcess sender)
         {
-            // プログレスバーと進捗度を示すラベルの更新
-            ThreadSafeDelegate(delegate
-            {
-                toolStripProgressBar1.Value++;
-                toolStripStatusLabel1.Text = "";
-                // COMポート名を昇順にソートしてからラベル文字をいじる
-                List<string> sortedPortInstanceDictKeys = portInstanceDict.Keys.ToList();
-                sortedPortInstanceDictKeys.Sort();
-                foreach (string key in sortedPortInstanceDictKeys)
-                {
-                    toolStripStatusLabel1.Text += "[" + portInstanceDict[key].PortName + "   " + portInstanceDict[key].sendedMfxCommandCnt.ToString() + " / " + sendMfxCommandList.Count + "]  ";
-                }
-            });
+            // 進捗度を示すラベルの更新
+            ThreadSafeDelegate(() => toolStripStatusLabel1Update());
         }
         /***** BLE接続完了メソッド（イベント呼び出し） *****/
         void serialCommProcessEventBLEConncted(SerialCommProcess sender)
         {
-            bleConnectedCnt++;
-            // 全ドングルがPLENと接続された時
-            if (bleConnectedCnt >= portInstanceDict.Count)
+            // 進捗度を示すラベルの更新
+            ThreadSafeDelegate(() => toolStripStatusLabel1Update());
+        }
+        void toolStripStatusLabel1Update()
+        {
+            // COMポート名を昇順にソートしてからラベル文字をいじる
+            List<string> sortedPortInstanceDictKeys = portInstanceDict.Keys.ToList();
+            sortedPortInstanceDictKeys.Sort();
+            toolStripStatusLabel1.Text = "";
+            foreach (string key in sortedPortInstanceDictKeys)
             {
-                // プログレスバーの最大値の設定や初期化と進捗度を示すラベルの初期化
-                ThreadSafeDelegate(delegate
-                {
-                    toolStripProgressBar1.Enabled = true;
-                    toolStripProgressBar1.Value = 0;
-                    toolStripProgressBar1.Maximum = sendMfxCommandList.Count * portInstanceDict.Count;
-                    // COMポート名を昇順にソートしてからラベル文字をいじる
-                    List<string> sortedPortInstanceDictKeys = portInstanceDict.Keys.ToList();
-                    sortedPortInstanceDictKeys.Sort();
-                    toolStripStatusLabel1.Text = "";
-                    foreach (string key in sortedPortInstanceDictKeys)
-                    {
+                // PLENと接続が完了してるポートのみラベル
+                if (portInstanceDict[key].BLEConnectState == BLEState.Connected)
 
-                        toolStripStatusLabel1.Text += "[ " + portInstanceDict[key].PortName + "   0 / " + sendMfxCommandList.Count + " ]    ";
-                    }
-                });
+                    toolStripStatusLabel1.Text += "[ " + portInstanceDict[key].PortName + "   " + portInstanceDict[key].sendedMfxCommandCnt.ToString() + " / " + sendMfxCommandList.Count + " ]    ";
             }
         }
 
-        /***** シリアル通信スレッド終了通知メソッド（イベント呼び出し） *****/
+        /***** 全モーションコマンド送信完了メソッド（イベント呼び出し） *****/
         void serialCommEventProcessFinished(object sender, SerialCommProcessFinishedEventArgs args)
         {
+            commandSendedPLENCnt++;
+
             // 通知元のスレッドを終了させ，テーブルから削除
             ThreadSafeDelegate(delegate
             {
                 textBox1.AppendText(" ***** [" + args.PortName + "] Finished *****" + System.Environment.NewLine);
-                if (threadDict.Keys.Contains(args.PortName))
-                {
-                    threadDict[args.PortName].Abort();
-                    threadDict.Remove(args.PortName);
-                }
-                // すべてのスレッドが終了した時
-                if (threadDict.Values.Count <= 0)
-                {
-                    button1.Enabled = true;
-                    button2.Enabled = false;
-                    textBox1.AppendText(System.Environment.NewLine + "***** すべてのモーションデータの送信が完了しました。*****" + System.Environment.NewLine + System.Environment.NewLine);
-                }
+                toolStripStatusLabel2.Text = "コマンド送信完了PLEN数：" + commandSendedPLENCnt.ToString();
             });
 
         }
@@ -292,6 +266,16 @@ namespace BLEMotionInstaller
             button1.Enabled = true;
             button2.Enabled = false;
         }
+        /****** フォームが閉じられるときに呼ばれるメソッド（イベント呼び出し） *****/
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // すべての通信スレッドに停止命令を送信
+            foreach (string key in threadDict.Keys)
+            {
+                threadDict[key].Abort();
+            }
+        }
+
 
     }
 }
