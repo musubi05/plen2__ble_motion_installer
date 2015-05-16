@@ -1,0 +1,203 @@
+﻿namespace BLEMotionInstaller
+{
+    partial class Form1
+    {
+        /// <summary>
+        /// 必要なデザイナー変数です。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// 使用中のリソースをすべてクリーンアップします。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows フォーム デザイナーで生成されたコード
+
+        /// <summary>
+        /// デザイナー サポートに必要なメソッドです。このメソッドの内容を
+        /// コード エディターで変更しないでください。
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.labelSendMfxCnt = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.statusStrip1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Enabled = false;
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(150, 16);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar1,
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 370);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(634, 22);
+            this.statusStrip1.TabIndex = 19;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            // 
+            // labelSendMfxCnt
+            // 
+            this.labelSendMfxCnt.AutoSize = true;
+            this.labelSendMfxCnt.Location = new System.Drawing.Point(171, 5);
+            this.labelSendMfxCnt.Name = "labelSendMfxCnt";
+            this.labelSendMfxCnt.Size = new System.Drawing.Size(11, 12);
+            this.labelSendMfxCnt.TabIndex = 18;
+            this.labelSendMfxCnt.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(153, 12);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "送信されるモーションファイル数：";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(86, 30);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(159, 23);
+            this.button3.TabIndex = 16;
+            this.button3.Text = "モーションファイル読み込み";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(19, 68);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(78, 12);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "COM Port List";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(182, 68);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(20, 12);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "log";
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(433, 30);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(104, 26);
+            this.button2.TabIndex = 13;
+            this.button2.Text = "通信強制終了";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(174, 86);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(444, 266);
+            this.textBox1.TabIndex = 12;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button1.Location = new System.Drawing.Point(277, 30);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(104, 26);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "コマンド送信開始";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(19, 86);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.listBox1.Size = new System.Drawing.Size(128, 268);
+            this.listBox1.TabIndex = 10;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(634, 392);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.labelSendMfxCnt);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.listBox1);
+            this.Name = "Form1";
+            this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Label labelSendMfxCnt;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox listBox1;
+
+    }
+}
+
